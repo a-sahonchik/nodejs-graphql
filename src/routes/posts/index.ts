@@ -4,12 +4,12 @@ import { createPostBodySchema, changePostBodySchema } from './schema';
 import type { PostEntity } from '../../utils/DB/entities/DBPosts';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
-  fastify
+  fastify,
 ): Promise<void> => {
-  fastify.get('/', async function (request, reply): Promise<PostEntity[]> {
-      const posts = fastify.db.posts.findMany();
+  fastify.get('/', async function (): Promise<PostEntity[]> {
+    const posts = fastify.db.posts.findMany();
 
-      return posts;
+    return posts;
   });
 
   fastify.get(
@@ -19,15 +19,15 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<PostEntity> {
-        const post = await fastify.db.posts.findOne({ key: 'id', equals: request.params.id });
+    async function (request): Promise<PostEntity> {
+      const post = await fastify.db.posts.findOne({ key: 'id', equals: request.params.id });
 
-        if (post === null) {
-            throw fastify.httpErrors.notFound('Post not found');
-        }
+      if (post === null) {
+        throw fastify.httpErrors.notFound('Post not found');
+      }
 
-        return post;
-    }
+      return post;
+    },
   );
 
   fastify.post(
@@ -37,17 +37,17 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         body: createPostBodySchema,
       },
     },
-    async function (request, reply): Promise<PostEntity> {
-        const postAuthor = await fastify.db.users.findOne({ key: 'id', equals: request.body.userId });
+    async function (request): Promise<PostEntity> {
+      const postAuthor = await fastify.db.users.findOne({ key: 'id', equals: request.body.userId });
 
-        if (postAuthor === null) {
-            throw fastify.httpErrors.badRequest('Post author not found');
-        }
+      if (postAuthor === null) {
+        throw fastify.httpErrors.badRequest('Post author not found');
+      }
 
-        const post = await fastify.db.posts.create(request.body);
+      const post = await fastify.db.posts.create(request.body);
 
-        return post;
-    }
+      return post;
+    },
   );
 
   fastify.delete(
@@ -57,17 +57,17 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<PostEntity> {
-        const post = await fastify.db.posts.findOne({ key: 'id', equals: request.params.id });
+    async function (request): Promise<PostEntity> {
+      const post = await fastify.db.posts.findOne({ key: 'id', equals: request.params.id });
 
-        if (post === null) {
-            throw fastify.httpErrors.badRequest('Post not found');
-        }
+      if (post === null) {
+        throw fastify.httpErrors.badRequest('Post not found');
+      }
 
-        const deletedPost = await fastify.db.posts.delete(request.params.id);
+      const deletedPost = await fastify.db.posts.delete(request.params.id);
 
-        return deletedPost;
-    }
+      return deletedPost;
+    },
   );
 
   fastify.patch(
@@ -78,15 +78,15 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<PostEntity> {
-        try {
-            const patchedPost = await fastify.db.posts.change(request.params.id, request.body);
+    async function (request): Promise<PostEntity> {
+      try {
+        const patchedPost = await fastify.db.posts.change(request.params.id, request.body);
 
-            return patchedPost;
-        } catch (error: any) {
-            throw fastify.httpErrors.badRequest(error);
-        }
-    }
+        return patchedPost;
+      } catch (error: any) {
+        throw fastify.httpErrors.badRequest(error);
+      }
+    },
   );
 };
 

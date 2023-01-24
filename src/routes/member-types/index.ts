@@ -4,14 +4,12 @@ import { changeMemberTypeBodySchema } from './schema';
 import type { MemberTypeEntity } from '../../utils/DB/entities/DBMemberTypes';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
-  fastify
+  fastify,
 ): Promise<void> => {
-  fastify.get('/', async function (request, reply): Promise<
-    MemberTypeEntity[]
-  > {
-      const memberTypes = fastify.db.memberTypes.findMany();
+  fastify.get('/', async function (): Promise<MemberTypeEntity[]> {
+    const memberTypes = fastify.db.memberTypes.findMany();
 
-      return memberTypes;
+    return memberTypes;
   });
 
   fastify.get(
@@ -21,15 +19,15 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<MemberTypeEntity> {
-        const memberType = await fastify.db.memberTypes.findOne({ key: 'id', equals: request.params.id});
+    async function (request): Promise<MemberTypeEntity> {
+      const memberType = await fastify.db.memberTypes.findOne({ key: 'id', equals: request.params.id });
 
-        if (memberType === null) {
-            throw fastify.httpErrors.notFound('Member type not found');
-        }
+      if (memberType === null) {
+        throw fastify.httpErrors.notFound('Member type not found');
+      }
 
-        return memberType;
-    }
+      return memberType;
+    },
   );
 
   fastify.patch(
@@ -40,15 +38,15 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         params: idParamSchema,
       },
     },
-    async function (request, reply): Promise<MemberTypeEntity> {
-        try {
-            const patchedMemberType = await fastify.db.memberTypes.change(request.params.id, request.body);
+    async function (request): Promise<MemberTypeEntity> {
+      try {
+        const patchedMemberType = await fastify.db.memberTypes.change(request.params.id, request.body);
 
-            return patchedMemberType;
-        } catch (error: any) {
-            throw fastify.httpErrors.badRequest(error);
-        }
-    }
+        return patchedMemberType;
+      } catch (error: any) {
+        throw fastify.httpErrors.badRequest(error);
+      }
+    },
   );
 };
 
