@@ -17,6 +17,7 @@
     "@typescript-eslint/indent": ["error", 2],
     "prefer-arrow-callback": "off",
     "func-names": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "object-curly-newline": "off"
   }
 }

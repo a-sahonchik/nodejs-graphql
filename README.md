@@ -72,5 +72,5 @@ If you have chosen a non-default gql environment, then the connection of some fu
 ### Description for the 4 task:  
 If you have chosen a non-default gql environment, then the connection of some functionality may differ, be sure to report this in the PR.  
 Limit the complexity of the graphql queries by their depth with "graphql-depth-limit" package.  
-E.g. User can refer to other users via properties `userSubscribedTo`, `subscribedToUser` and users within them can also have `userSubscribedTo`, `subscribedToUser` and so on.  
+E.g. GraphQLUser can refer to other users via properties `userSubscribedTo`, `subscribedToUser` and users within them can also have `userSubscribedTo`, `subscribedToUser` and so on.  
 Your task is to add a new rule (created by "graphql-depth-limit") in [validation](https://graphql.org/graphql-js/validation/) to limit such nesting to (for example) 6 levels max.
