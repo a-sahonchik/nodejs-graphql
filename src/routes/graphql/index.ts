@@ -9,8 +9,16 @@ import {
   GraphQLString,
 } from 'graphql';
 import { graphqlBodySchema } from './schema';
-import { GraphQLMemberType, GraphQLPost, GraphQLProfile, GraphQLUser } from './types';
-import { GraphQLUserWithRelatedEntities } from './types/GraphQLUserWithRelatedEntities';
+import {
+  GraphQLMemberType,
+  GraphQLPost,
+  GraphQLProfile,
+  GraphQLUser,
+  GraphQLUserWithRelatedEntities,
+  GraphQLUserWithProfile,
+  GraphQLUserWithPosts,
+  GraphQLUserWithSubscriptions,
+} from './types';
 
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
   fastify,
@@ -24,6 +32,15 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
     },
     async function (request) {
       const GraphQLUserWithRelatedEntitiesType = await GraphQLUserWithRelatedEntities(fastify);
+      const GraphQLUserWithProfileType = await GraphQLUserWithProfile(fastify);
+      const GraphQLUserWithPostsType = await GraphQLUserWithPosts(fastify);
+      const GraphQLUserWithSubscriptionsType = await GraphQLUserWithSubscriptions(fastify);
+
+      const user1 = await fastify.db.users.create({ firstName: 'User 1', lastName: 'ln', email: 'dfgsf@dsf.dsf' });
+      const user2 = await fastify.db.users.create({ firstName: 'User 2', lastName: 'ln', email: 'dfgsf@dsf.dsf' });
+      const user3 = await fastify.db.users.create({ firstName: 'User 3', lastName: 'ln', email: 'dfgsf@dsf.dsf' });
+      await fastify.db.users.change(user1.id, { subscribedToUserIds: [user2.id, user3.id] });
+      await fastify.db.users.change(user2.id, { subscribedToUserIds: [user1.id] });
 
       const schema = new GraphQLSchema({
         query: new GraphQLObjectType({
@@ -134,6 +151,37 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
                 }
 
                 return user;
+              },
+            },
+            getUsersWithProfile: {
+              type: new GraphQLList(GraphQLUserWithProfileType),
+              async resolve() {
+                const users = await fastify.db.users.findMany();
+
+                return users;
+              },
+            },
+            getUserWithPosts: {
+              type: GraphQLUserWithPostsType,
+              args: {
+                id: { type: GraphQLID },
+              },
+              async resolve(_, args) {
+                const user = await fastify.db.users.findOne({ key: 'id', equals: args.id });
+
+                if (user === null) {
+                  throw fastify.httpErrors.notFound('User not found');
+                }
+
+                return user;
+              },
+            },
+            getUsersWithSubscriptions: {
+              type: new GraphQLList(GraphQLUserWithSubscriptionsType),
+              async resolve() {
+                const users = await fastify.db.users.findMany();
+
+                return users;
               },
             },
           },
