@@ -12,34 +12,6 @@ import { graphqlBodySchema } from './schema';
 import { GraphQLMemberType, GraphQLPost, GraphQLProfile, GraphQLUser } from './types';
 import { GraphQLUserWithRelatedEntities } from './types/GraphQLUserWithRelatedEntities';
 
-let i = 1;
-
-// @ts-ignore
-const prepareTestData = async (fastify) => {
-  const testUser = await fastify.db.users.create({
-    firstName: `User ${i}`,
-    lastName: `LastName ${i}`,
-    email: `user${i}@gmail.com`,
-  });
-
-  await fastify.db.profiles.create({
-    userId: testUser.id,
-    memberTypeId: 'basic',
-    avatar: 'avatar',
-    sex: 'sometimes',
-    birthday: 5345345345,
-    country: 'BY',
-    street: 'Street',
-    city: 'Minsk',
-  });
-
-  await fastify.db.posts.create({
-    userId: testUser.id,
-    title: `Title ${i}`,
-    content: 'Content',
-  });
-};
-
 const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
   fastify,
 ): Promise<void> => {
@@ -51,10 +23,6 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
       },
     },
     async function (request) {
-      if (i <= 5) {
-        await prepareTestData(fastify);
-      }
-
       const GraphQLUserWithRelatedEntitiesType = await GraphQLUserWithRelatedEntities(fastify);
 
       const schema = new GraphQLSchema({
@@ -260,14 +228,100 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
                 return post;
               },
             },
+            updateUser: {
+              type: GraphQLUser,
+              args: {
+                id: { type: new GraphQLNonNull(GraphQLID) },
+                firstName: { type: GraphQLString },
+                lastName: { type: GraphQLString },
+                email: { type: GraphQLString },
+              },
+              async resolve(_, args) {
+                const user = await fastify.db.users.findOne({ key: 'id', equals: args.id });
+
+                if (user === null) {
+                  throw fastify.httpErrors.notFound('User not found');
+                }
+
+                const patchedUser = await fastify.db.users.change(args.id, args);
+
+                return patchedUser;
+              },
+            },
+            updateProfile: {
+              type: GraphQLProfile,
+              args: {
+                id: { type: new GraphQLNonNull(GraphQLID) },
+                avatar: { type: GraphQLString },
+                sex: { type: GraphQLString },
+                birthday: { type: GraphQLInt },
+                country: { type: GraphQLString },
+                street: { type: GraphQLString },
+                city: { type: GraphQLString },
+                memberTypeId: { type: GraphQLString },
+              },
+              async resolve(_, args) {
+                const profile = await fastify.db.profiles.findOne({ key: 'id', equals: args.id });
+
+                if (profile === null) {
+                  throw fastify.httpErrors.notFound('Profile not found');
+                }
+
+                const memberType = await fastify.db.memberTypes.findOne({ key: 'id', equals: args.memberTypeId });
+
+                if (memberType === null) {
+                  throw fastify.httpErrors.notFound('Member type not found');
+                }
+
+                const patchedProfile = await fastify.db.profiles.change(args.id, args);
+
+                return patchedProfile;
+              },
+            },
+            updatePost: {
+              type: GraphQLPost,
+              args: {
+                id: { type: new GraphQLNonNull(GraphQLID) },
+                title: { type: GraphQLString },
+                content: { type: GraphQLString },
+              },
+              async resolve(_, args) {
+                const post = await fastify.db.posts.findOne({ key: 'id', equals: args.id });
+
+                if (post === null) {
+                  throw fastify.httpErrors.notFound('Post not found');
+                }
+
+                const patchedPost = await fastify.db.posts.change(args.id, args);
+
+                return patchedPost;
+              },
+            },
+            updateMemberType: {
+              type: GraphQLMemberType,
+              args: {
+                id: { type: new GraphQLNonNull(GraphQLID) },
+                discount: { type: GraphQLInt },
+                monthPostsLimit: { type: GraphQLInt },
+              },
+              async resolve(_, args) {
+                const memberType = await fastify.db.memberTypes.findOne({ key: 'id', equals: args.id });
+
+                if (memberType === null) {
+                  throw fastify.httpErrors.notFound('Member type not found');
+                }
+
+                const patchedMemberType = await fastify.db.memberTypes.change(args.id, args);
+
+                return patchedMemberType;
+              },
+            },
           },
         }),
       });
 
       // @ts-ignore
       const result = await graphql({ schema, source: request.body.query });
-
-      i += 1;
 
       return result;
     },
