@@ -7,9 +7,9 @@ const errorMessage = {
   MEMBER_TYPE_NOT_FOUND: 'Member type not found',
   USER_ALREADY_HAS_PROFILE: 'User already has a profile',
   USER_SUBSCRIBES_TO_HIMSELF: 'User can\'t subscribe to himself',
-  USER_UNSUBSCRIBES_FROM_HIMSELF: 'User can\'t subscribe to himself',
   USER_ALREADY_SUBSCRIBED: 'User already subscribed',
   NO_QUERY_IN_REQUEST: 'Request query parameter must be defined',
+  USER_NOT_SUBSCRIBED: 'User is not subscribed',
 };
 
 export { errorMessage };

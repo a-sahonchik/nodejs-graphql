@@ -3,7 +3,7 @@ import {
 } from 'graphql';
 import { FastifyInstance } from 'fastify';
 import { GraphQLProfile } from './GraphQLProfile';
-import { UserEntity } from '../../../utils/DB/entities/DBUsers';
+import { UserEntity } from '../../../../utils/DB/entities/DBUsers';
 import { GraphQLPost } from './GraphQLPost';
 import { GraphQLMemberType } from './GraphQLMemberType';
 

@@ -15,14 +15,21 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
       },
     },
     async function (request) {
-      await assertRequestBodyQueryExists(request.body.query, fastify);
+      const { query, variables } = request.body;
+
+      await assertRequestBodyQueryExists(query, fastify);
 
       const schema = new GraphQLSchema({
         query: await getQuery(fastify),
         mutation: await getMutation(fastify),
       });
 
-      return graphql({ schema, source: request.body.query!, contextValue: fastify });
+      return graphql({
+        schema,
+        source: query!,
+        variableValues: variables,
+        contextValue: fastify,
+      });
     },
   );
 };
