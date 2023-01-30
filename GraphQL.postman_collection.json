@@ -103,7 +103,7 @@
 				"body": {
 					"mode": "graphql",
 					"graphql": {
-						"query": "query ($userId: ID!) {\n    getUser (id: $userId) {\n        id\n        firstName\n        lastName\n        email\n        subscribedToUserIds\n\n        profile {\n            id\n            userId\n            memberTypeId\n            avatar\n            sex\n            birthday\n            country\n            street\n            city\n        }\n\n        posts {\n            id\n            userId\n            title\n            content\n        }\n\n        memberType {\n            id\n            discount\n            monthPostsLimit\n        }\n    }\n}",
+						"query": "query ($userId: GraphQLUUID!) {\n    getUser (id: $userId) {\n        id\n        firstName\n        lastName\n        email\n        subscribedToUserIds\n\n        profile {\n            id\n            userId\n            memberTypeId\n            avatar\n            sex\n            birthday\n            country\n            street\n            city\n        }\n\n        posts {\n            id\n            userId\n            title\n            content\n        }\n\n        memberType {\n            id\n            discount\n            monthPostsLimit\n        }\n    }\n}",
 						"variables": "{\n    \"userId\": \"eb82d97f-eff1-452f-9d79-b0bd13fcc512\"\n}"
 					},
 					"options": {
@@ -163,7 +163,7 @@
 				"body": {
 					"mode": "graphql",
 					"graphql": {
-						"query": "query ($userId: ID!) {\n    getUser (id: $userId) {\n        id\n        firstName\n        lastName\n        email\n\n        subscribedToUser {\n            id\n            firstName\n            lastName\n            email\n        }\n\n        posts {\n            id\n            userId\n            title\n            content\n        }\n    }\n}",
+						"query": "query ($userId: GraphQLUUID!) {\n    getUser (id: $userId) {\n        id\n        firstName\n        lastName\n        email\n\n        subscribedToUser {\n            id\n            firstName\n            lastName\n            email\n        }\n\n        posts {\n            id\n            userId\n            title\n            content\n        }\n    }\n}",
 						"variables": "{\n    \"userId\": \"5cc5ba84-00e4-459a-9e77-0a516200cf18\"\n}"
 					},
 					"options": {
@@ -254,7 +254,7 @@
 					"mode": "graphql",
 					"graphql": {
 						"query": "mutation ($variables: CreateUserInput!) {\n    createUser ( variables: $variables) {\n        id\n        firstName\n        lastName\n        email\n    }\n}\n",
-						"variables": "{\n    \"variables\": {\n        \"firstName\": \"User 1\",\n        \"lastName\": \"Lastname\",\n        \"email\": \"user1@example.com\"\n    }\n\n}"
+						"variables": "{\n    \"variables\": {\n        \"firstName\": \"User 1\",\n        \"lastName\": \"Lastname\",\n        \"email\": \"user1@example.com\"\n    }\n}"
 					},
 					"options": {
 						"raw": {
@@ -284,7 +284,7 @@
 					"mode": "graphql",
 					"graphql": {
 						"query": "mutation ($variables: CreateProfileInput!) {\n    createProfile ( variables: $variables) {\n        id\n        userId\n        memberTypeId\n        avatar\n        sex\n        birthday\n        country\n        street\n        city\n    }\n}",
-						"variables": "{\n    \"variables\": {\n        \"userId\": \"bac86758-65cf-4683-a938-34bdd60cc80a\",\n        \"memberTypeId\": \"basic\",\n        \"avatar\": \"avatar\",\n        \"sex\": \"male\",\n        \"birthday\": 45345345,\n        \"country\": \"BY\",\n        \"street\": \"Street\",\n        \"city\": \"Minsk\"\n    }\n\n}"
+						"variables": "{\n    \"variables\": {\n        \"userId\": \"bac86758-65cf-4683-a938-34bdd60cc80a\",\n        \"memberTypeId\": \"basic\",\n        \"avatar\": \"avatar\",\n        \"sex\": \"male\",\n        \"birthday\": 45345345,\n        \"country\": \"BY\",\n        \"street\": \"Street\",\n        \"city\": \"Minsk\"\n    }\n}"
 					},
 					"options": {
 						"raw": {
@@ -346,8 +346,8 @@
 				"body": {
 					"mode": "graphql",
 					"graphql": {
-						"query": "mutation (\n    $id: ID!\n    $variables: UpdateUserInput!\n) {\n    updateUser (\n        id: $id\n        variables: $variables\n    ) {\n        id\n        firstName\n        lastName\n        email\n    }\n}",
-						"variables": "{\n    \"id\": \"eb3aa2ed-c436-4e3b-8990-d842231d196a\",\n    \"variables\": {\n        \"firstName\": \"New firstName\",\n        \"lastName\": \"New lastName\",\n        \"email\": \"new Email\"\n    }\n\n}"
+						"query": "mutation (\n    $id: GraphQLUUID!\n    $variables: UpdateUserInput!\n) {\n    updateUser (\n        id: $id\n        variables: $variables\n    ) {\n        id\n        firstName\n        lastName\n        email\n    }\n}",
+						"variables": "{\n    \"id\": \"eb3aa2ed-c436-4e3b-8990-d842231d196a\",\n    \"variables\": {\n        \"firstName\": \"New firstName\",\n        \"lastName\": \"New lastName\",\n        \"email\": \"new Email\"\n    }\n}"
 					},
 					"options": {
 						"raw": {
@@ -409,7 +409,7 @@
 				"body": {
 					"mode": "graphql",
 					"graphql": {
-						"query": "mutation (\n    $id: ID!\n    $variables: UpdatePostInput!\n) {\n    updatePost (\n        id: $id\n        variables: $variables\n    ) {\n        id\n        userId\n        title\n        content\n    }\n}",
+						"query": "mutation (\n    $id: GraphQLUUID!\n    $variables: UpdatePostInput!\n) {\n    updatePost (\n        id: $id\n        variables: $variables\n    ) {\n        id\n        userId\n        title\n        content\n    }\n}",
 						"variables": "{\n    \"id\": \"10510ca9-b5f2-427e-b11a-cf951fcbda23\",\n    \"variables\": {\n        \"title\": \"New Title\",\n        \"content\": \"New content\"\n    }\n}"
 					},
 					"options": {
@@ -473,7 +473,7 @@
 					"mode": "graphql",
 					"graphql": {
 						"query": "mutation ($variables: SubscribeToUserInput!) {\n    subscribeToUser (variables: $variables) {\n        id\n        firstName\n        lastName\n        email\n        subscribedToUserIds\n    }\n}",
-						"variables": "{\n    \"variables\": {\n        \"currentUserId\": \"c4eba349-7839-433f-9ffb-b77f188ebd96\",\n        \"subscribeToUserId\": \"0e9d6488-3169-4e8b-a98a-6047b1788fe1\"\n    }\n\n}"
+						"variables": "{\n    \"variables\": {\n        \"currentUserId\": \"c4eba349-7839-433f-9ffb-b77f188ebd96\",\n        \"subscribeToUserId\": \"0e9d6488-3169-4e8b-a98a-6047b1788fe1\"\n    }\n}"
 					},
 					"options": {
 						"raw": {
@@ -503,7 +503,7 @@
 					"mode": "graphql",
 					"graphql": {
 						"query": "mutation ($variables: UnsubscribeFromUserInput!) {\n    unsubscribeFromUser (variables: $variables) {\n        id\n        firstName\n        lastName\n        email\n        subscribedToUserIds\n    }\n}",
-						"variables": "{\n    \"variables\": {\n        \"currentUserId\": \"c4eba349-7839-433f-9ffb-b77f188ebd96\",\n        \"unsubscribeFromUserId\": \"0e9d6488-3169-4e8b-a98a-6047b1788fe1\"\n    }\n\n}"
+						"variables": "{\n    \"variables\": {\n        \"currentUserId\": \"c4eba349-7839-433f-9ffb-b77f188ebd96\",\n        \"unsubscribeFromUserId\": \"0e9d6488-3169-4e8b-a98a-6047b1788fe1\"\n    }\n}"
 					},
 					"options": {
 						"raw": {
