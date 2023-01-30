@@ -1,14 +1,20 @@
-import { GraphQLObjectType, GraphQLString } from 'graphql';
+import {
+  GraphQLID,
+  GraphQLInt,
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql';
+import { GraphQLUUID } from '../GraphQLUUID';
 
 const GraphQLProfile = new GraphQLObjectType({
   name: 'Profile',
   fields: () => ({
-    id: { type: GraphQLString },
-    userId: { type: GraphQLString },
-    memberTypeId: { type: GraphQLString },
+    id: { type: GraphQLUUID },
+    userId: { type: GraphQLUUID },
+    memberTypeId: { type: GraphQLID },
     avatar: { type: GraphQLString },
     sex: { type: GraphQLString },
-    birthday: { type: GraphQLString },
+    birthday: { type: GraphQLInt },
     country: { type: GraphQLString },
     street: { type: GraphQLString },
     city: { type: GraphQLString },

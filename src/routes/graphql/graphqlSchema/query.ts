@@ -10,6 +10,7 @@ import {
   GraphQLPost,
   GraphQLProfile,
   GraphQLUser,
+  GraphQLUUID,
 } from '../types';
 import {
   getMemberTypeById,
@@ -40,21 +41,21 @@ const getQuery = async (fastify: FastifyInstance): Promise<GraphQLObjectType> =>
     getUser: {
       type: GraphQLUser,
       args: {
-        id: { type: new GraphQLNonNull(GraphQLID) },
+        id: { type: new GraphQLNonNull(GraphQLUUID) },
       },
       resolve: async (_, args) => getUserById(args.id, fastify),
     },
     getProfile: {
       type: GraphQLProfile,
       args: {
-        id: { type: new GraphQLNonNull(GraphQLID) },
+        id: { type: new GraphQLNonNull(GraphQLUUID) },
       },
       resolve: async (_, args) => getProfileById(args.id, fastify),
     },
     getPost: {
       type: GraphQLPost,
       args: {
-        id: { type: new GraphQLNonNull(GraphQLID) },
+        id: { type: new GraphQLNonNull(GraphQLUUID) },
       },
       resolve: async (_, args) => getPostById(args.id, fastify),
     },

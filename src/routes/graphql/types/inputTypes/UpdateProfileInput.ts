@@ -1,4 +1,9 @@
-import { GraphQLString, GraphQLInputObjectType, GraphQLInt } from 'graphql';
+import {
+  GraphQLID,
+  GraphQLString,
+  GraphQLInputObjectType,
+  GraphQLInt,
+} from 'graphql';
 
 const UpdateProfileInput = new GraphQLInputObjectType({
   name: 'UpdateProfileInput',
@@ -9,7 +14,7 @@ const UpdateProfileInput = new GraphQLInputObjectType({
     country: { type: GraphQLString },
     street: { type: GraphQLString },
     city: { type: GraphQLString },
-    memberTypeId: { type: GraphQLString },
+    memberTypeId: { type: GraphQLID },
   },
 });
 

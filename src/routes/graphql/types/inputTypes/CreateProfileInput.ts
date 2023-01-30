@@ -1,12 +1,17 @@
 import {
-  GraphQLNonNull, GraphQLString, GraphQLInputObjectType, GraphQLID, GraphQLInt,
+  GraphQLNonNull,
+  GraphQLString,
+  GraphQLInputObjectType,
+  GraphQLID,
+  GraphQLInt,
 } from 'graphql';
+import { GraphQLUUID } from '../GraphQLUUID';
 
 const CreateProfileInput = new GraphQLInputObjectType({
   name: 'CreateProfileInput',
   fields: {
-    userId: { type: new GraphQLNonNull(GraphQLID) },
-    memberTypeId: { type: new GraphQLNonNull(GraphQLString) },
+    userId: { type: new GraphQLNonNull(GraphQLUUID) },
+    memberTypeId: { type: new GraphQLNonNull(GraphQLID) },
     avatar: { type: new GraphQLNonNull(GraphQLString) },
     sex: { type: new GraphQLNonNull(GraphQLString) },
     birthday: { type: new GraphQLNonNull(GraphQLInt) },

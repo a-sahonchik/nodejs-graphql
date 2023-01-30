@@ -1,9 +1,9 @@
-import { GraphQLInt, GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLID, GraphQLInt, GraphQLObjectType } from 'graphql';
 
 const GraphQLMemberType = new GraphQLObjectType({
   name: 'MemberType',
   fields: () => ({
-    id: { type: GraphQLString },
+    id: { type: GraphQLID },
     discount: { type: GraphQLInt },
     monthPostsLimit: { type: GraphQLInt },
   }),

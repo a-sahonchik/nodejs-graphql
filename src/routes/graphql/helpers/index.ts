@@ -4,7 +4,23 @@ export {
   updateUserFromInput,
   subscribeToUser,
   unsubscribeFromUser,
+  getUserSubscribedToDataLoader,
+  getSubscribedToUserDataLoader,
 } from './userHelpers';
-export { getProfileById, createProfileFromInput, updateProfileFromInput } from './profileHelpers';
-export { getPostById, createPostFromInput, updatePostFromInput } from './postHelpers';
-export { getMemberTypeById, updateMemberTypeFromInput } from './memberTypeHelpers';
+export {
+  getProfileById,
+  createProfileFromInput,
+  updateProfileFromInput,
+  getUserProfileDataLoader,
+} from './profileHelpers';
+export {
+  getPostById,
+  createPostFromInput,
+  updatePostFromInput,
+  getUserPostsDataLoader,
+} from './postHelpers';
+export {
+  getMemberTypeById,
+  updateMemberTypeFromInput,
+  getMemberTypeLoader,
+} from './memberTypeHelpers';

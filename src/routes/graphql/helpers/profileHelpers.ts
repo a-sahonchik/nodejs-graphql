@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import * as DataLoader from 'dataloader';
 import {
   assertMemberTypeExists,
   assertProfileExists,
@@ -45,4 +46,20 @@ const updateProfileFromInput = async (
   return fastify.db.profiles.change(profileId, input);
 };
 
-export { getProfileById, createProfileFromInput, updateProfileFromInput };
+const getUserProfileDataLoader = async (fastify: FastifyInstance) => new DataLoader(async (userIds) => {
+  const profiles = await fastify.db.profiles.findMany();
+
+  const profilesMap = profiles.reduce(
+    (map, profile) => map.set(profile.userId, profile),
+    new Map<string, ProfileEntity>(),
+  );
+
+  return userIds.map((userId) => profilesMap.get(String(userId)) ?? null);
+});
+
+export {
+  getProfileById,
+  createProfileFromInput,
+  updateProfileFromInput,
+  getUserProfileDataLoader,
+};

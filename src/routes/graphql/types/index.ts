@@ -9,3 +9,6 @@ export { UpdateUserInput } from './inputTypes/UpdateUserInput';
 export { UpdateProfileInput } from './inputTypes/UpdateProfileInput';
 export { UpdatePostInput } from './inputTypes/UpdatePostInput';
 export { UpdateMemberTypeInput } from './inputTypes/UpdateMemberTypeInput';
+export { SubscribeToUserInput } from './inputTypes/SubscribeToUserInput';
+export { UnsubscribeFromUserInput } from './inputTypes/UnsubscribeFromUserInput';
+export { GraphQLUUID } from './GraphQLUUID';

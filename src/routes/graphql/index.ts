@@ -4,12 +4,19 @@ import {
   graphql,
   GraphQLSchema,
   parse,
-  validate
+  validate,
 } from 'graphql';
 import * as depthLimit from 'graphql-depth-limit';
 import { graphqlBodySchema } from './schema';
 import { getMutation, getQuery } from './graphqlSchema';
 import { assertRequestBodyQueryExists } from './asserts';
+import {
+  getMemberTypeLoader,
+  getUserPostsDataLoader,
+  getUserProfileDataLoader,
+  getUserSubscribedToDataLoader,
+  getSubscribedToUserDataLoader,
+} from './helpers';
 
 const DEPTH_LIMIT = 6;
 
@@ -23,7 +30,7 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
         body: graphqlBodySchema,
       },
     },
-    async function (request, reply) {
+    async function (request) {
       const { query, variables } = request.body;
 
       await assertRequestBodyQueryExists(query, fastify);
@@ -37,18 +44,31 @@ const plugin: FastifyPluginAsyncJsonSchemaToTs = async (
 
       if (errors.length > 0) {
         const result: ExecutionResult = {
-          errors: errors,
+          errors,
           data: null,
         };
 
         return result;
       }
 
+      const userPostsDataLoader = await getUserPostsDataLoader(fastify);
+      const userProfileDataLoader = await getUserProfileDataLoader(fastify);
+      const memberTypeLoader = await getMemberTypeLoader(fastify);
+      const userSubscribedToDataLoader = await getUserSubscribedToDataLoader(fastify);
+      const subscribedToUserDataLoader = await getSubscribedToUserDataLoader(fastify);
+
       return graphql({
         schema,
         source: query!,
         variableValues: variables,
-        contextValue: fastify,
+        contextValue: {
+          fastify,
+          userPostsDataLoader,
+          userProfileDataLoader,
+          memberTypeLoader,
+          userSubscribedToDataLoader,
+          subscribedToUserDataLoader,
+        },
       });
     },
   );

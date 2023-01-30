@@ -7,3 +7,4 @@ export { assertUsersNotTheSame } from './assertUsersNotTheSame';
 export { assertUserNotSubscribed } from './assertUserNotSubscribed';
 export { assertRequestBodyQueryExists } from './assertRequestBodyQueryExists';
 export { assertUserSubscribed } from './assertUserSubscribed';
+export { assertValidUUID } from './assertValidUUID';

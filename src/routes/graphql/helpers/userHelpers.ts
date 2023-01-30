@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import * as DataLoader from 'dataloader';
 import {
   assertUserExists,
   assertUserNotSubscribed,
@@ -90,10 +91,31 @@ const unsubscribeFromUser = async (
   }
 };
 
+const getUserSubscribedToDataLoader = async (fastify: FastifyInstance) => new DataLoader<string, UserEntity[]>(
+  async (userIds) => {
+    const users = await fastify.db.users.findMany();
+
+    return userIds.map((userId) => users.filter((user) => user.subscribedToUserIds.includes(userId)));
+  },
+);
+
+const getSubscribedToUserDataLoader = async (fastify: FastifyInstance) => new DataLoader(async (userIds) => {
+  const users = await fastify.db.users.findMany();
+
+  const usersMap = users.reduce(
+    (map, user) => map.set(user.id, user),
+    new Map<string, UserEntity>(),
+  );
+
+  return userIds.map((userId) => usersMap.get(String(userId)) ?? null);
+});
+
 export {
   getUserById,
   createUserFromInput,
   updateUserFromInput,
   subscribeToUser,
   unsubscribeFromUser,
+  getUserSubscribedToDataLoader,
+  getSubscribedToUserDataLoader,
 };

@@ -16,6 +16,9 @@ import {
   UpdateProfileInput,
   UpdatePostInput,
   UpdateMemberTypeInput,
+  SubscribeToUserInput,
+  UnsubscribeFromUserInput,
+  GraphQLUUID,
 } from '../types';
 import {
   createPostFromInput,
@@ -62,7 +65,7 @@ const getMutation = async (fastify: FastifyInstance): Promise<GraphQLObjectType>
     updateUser: {
       type: GraphQLUser,
       args: {
-        id: { type: new GraphQLNonNull(GraphQLID) },
+        id: { type: new GraphQLNonNull(GraphQLUUID) },
         variables: {
           type: new GraphQLNonNull(UpdateUserInput),
         },
@@ -72,7 +75,7 @@ const getMutation = async (fastify: FastifyInstance): Promise<GraphQLObjectType>
     updateProfile: {
       type: GraphQLProfile,
       args: {
-        id: { type: new GraphQLNonNull(GraphQLID) },
+        id: { type: new GraphQLNonNull(GraphQLUUID) },
         variables: {
           type: new GraphQLNonNull(UpdateProfileInput),
         },
@@ -82,7 +85,7 @@ const getMutation = async (fastify: FastifyInstance): Promise<GraphQLObjectType>
     updatePost: {
       type: GraphQLPost,
       args: {
-        id: { type: new GraphQLNonNull(GraphQLID) },
+        id: { type: new GraphQLNonNull(GraphQLUUID) },
         variables: {
           type: new GraphQLNonNull(UpdatePostInput),
         },
@@ -102,18 +105,28 @@ const getMutation = async (fastify: FastifyInstance): Promise<GraphQLObjectType>
     subscribeToUser: {
       type: GraphQLUser,
       args: {
-        id: { type: new GraphQLNonNull(GraphQLID) },
-        subscribeToUserId: { type: new GraphQLNonNull(GraphQLID) },
+        variables: {
+          type: new GraphQLNonNull(SubscribeToUserInput),
+        },
       },
-      resolve: async (_, args) => subscribeToUser(args.id, args.subscribeToUserId, fastify),
+      resolve: async (_, { variables }) => subscribeToUser(
+        variables.currentUserId,
+        variables.subscribeToUserId,
+        fastify,
+      ),
     },
     unsubscribeFromUser: {
       type: GraphQLUser,
       args: {
-        id: { type: new GraphQLNonNull(GraphQLID) },
-        unsubscribeFromUserId: { type: new GraphQLNonNull(GraphQLID) },
+        variables: {
+          type: new GraphQLNonNull(UnsubscribeFromUserInput),
+        },
       },
-      resolve: async (_, args) => unsubscribeFromUser(args.id, args.unsubscribeFromUserId, fastify),
+      resolve: async (_, { variables }) => unsubscribeFromUser(
+        variables.currentUserId,
+        variables.unsubscribeFromUserId,
+        fastify,
+      ),
     },
   },
 });

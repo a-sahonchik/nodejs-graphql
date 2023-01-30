@@ -1,10 +1,11 @@
 import { GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLUUID } from '../GraphQLUUID';
 
 const GraphQLPost = new GraphQLObjectType({
   name: 'Post',
   fields: () => ({
-    id: { type: GraphQLString },
-    userId: { type: GraphQLString },
+    id: { type: GraphQLUUID },
+    userId: { type: GraphQLUUID },
     title: { type: GraphQLString },
     content: { type: GraphQLString },
   }),

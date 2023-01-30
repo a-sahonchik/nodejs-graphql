@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import * as DataLoader from 'dataloader';
 import { assertPostExists, assertUserExists } from '../asserts';
 import { PostEntity } from '../../../utils/DB/entities/DBPosts';
 
@@ -26,4 +27,15 @@ const updatePostFromInput = async (postId: string, input: any, fastify: FastifyI
   return fastify.db.posts.change(postId, input);
 };
 
-export { getPostById, createPostFromInput, updatePostFromInput };
+const getUserPostsDataLoader = async (fastify: FastifyInstance) => new DataLoader(async (userIds) => {
+  const posts = await fastify.db.posts.findMany();
+
+  return userIds.map((userId) => posts.filter((post) => post.userId === userId));
+});
+
+export {
+  getPostById,
+  createPostFromInput,
+  updatePostFromInput,
+  getUserPostsDataLoader,
+};
